@@ -1,3 +1,3 @@
 # claw-machine
 
-Cre: The coding wizard
+Cre: The coding wizard.
