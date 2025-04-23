@@ -1,3 +1,25 @@
+const sounds = {
+  success: document.getElementById('success-sound'),
+  fail: document.getElementById('fail-sound'),
+}
+
+function startGame() {
+  const startScreen = document.getElementById('start-screen')
+  const bgMusic = document.getElementById('bg-music')
+
+  startScreen.style.display = 'none'
+
+  if (bgMusic) {
+    bgMusic.volume = 0.5
+    bgMusic.play().catch(err => {
+      console.error('Không thể phát nhạc:', err)
+    })
+  } else {
+    console.warn('Không tìm thấy nhạc nền')
+  }
+}
+window.startGame = startGame
+
 const elements = {
   clawMachine: document.querySelector('.claw-machine'),
   box: document.querySelector('.box'),
@@ -254,6 +276,9 @@ class Toy extends WorldObject {
         innerHTML: `<div class="toy pix ${toy.toyType}"></div>`,
       }),
     )
+    showNotification(getRandomSuccessMsg())
+    sounds.success.currentTime = 0
+    sounds.success.play()
     setTimeout(() => {
       elements.clawMachine.classList.remove('show-overlay')
       if (!document.querySelector('.selected'))
@@ -276,6 +301,37 @@ class Toy extends WorldObject {
 }
 
 //* set up *//
+const frenchSuccessMessages = [
+  "🎉 Bien joué, Antoine ! Tu as eu le coup parfait !",
+  "🧸 Incroyable, Antoine ! La chance est avec toi !",
+  "👑 Antoine, tu es le roi de la pince !",
+  "🎯 Félicitations Antoine ! Tu viens de faire un super coup !",
+  "✨ Quel talent, Antoine ! Même la pince t’obéit !"
+]
+
+const frenchFailMessages = [
+  "😞 Zut alors, Antoine ! Ce n’est que partie remise.",
+  "🙃 Pas cette fois, Antoine... mais tu es proche !",
+  "🛑 Oh non, Antoine ! Essaie encore une fois !",
+  "💔 La pince a glissé... Quelle malchance, Antoine !",
+  "💪 Courage Antoine ! Tu finiras par l’avoir !"
+]
+
+function getRandomSuccessMsg() {
+  return frenchSuccessMessages[Math.floor(Math.random() * frenchSuccessMessages.length)]
+}
+function getRandomFailMsg() {
+  return frenchFailMessages[Math.floor(Math.random() * frenchFailMessages.length)]
+}
+function showNotification(message) {
+  const notification = document.getElementById('notification')
+  notification.textContent = message
+  notification.classList.add('show')
+
+  setTimeout(() => {
+    notification.classList.remove('show')
+  }, 2000)
+}
 elements.box.style.setProperty('--shadow-pos', `${maxArmLength}px`)
 
 const armJoint = new WorldObject({
@@ -390,7 +446,10 @@ const grabToy = () => {
     settings.targetToy.setRotateAngle()
     settings.targetToy.el.classList.add('grabbed')
   } else {
+    showNotification(getRandomFailMsg())
     arm.el.classList.add('missed')
+    sounds.fail.currentTime = 0
+    sounds.fail.play()
   }
 }
 

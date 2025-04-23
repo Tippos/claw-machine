@@ -7,6 +7,9 @@
     <title>Claw Machine</title>
   </head>
   <body>
+    <div id="start-screen" class="start-screen">
+      <button id="start-button" onclick="startGame()">Play Game 🎮</button>
+    </div>
     <div class="wrapper">
       <div class="collection-box pix"></div>
       <div class="claw-machine">
@@ -42,7 +45,10 @@
     <div class="sign">
       by masahito / <a href="http://www.ma5a.com/">ma5a.com</a>
     </div>
-
+    <div class="notification" id="notification"></div>
+    <audio id="bg-music" src="sounds/bg-music.mp3" loop></audio>
+    <audio id="success-sound" src="sounds/success-sound.mp3"></audio>
+    <audio id="fail-sound" src="sounds/fail-sound.mp3"></audio>
     <script src="claw-machine.js"></script>
   </body>
 </html>
